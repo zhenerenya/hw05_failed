@@ -10,9 +10,6 @@ using::testing::NiceMock;
 class MockAccount: public Account{
 public:
     MockAccount(int id, int balance):Account(id, balance){}
-    // MOCK_METHOD(int, GetBalance, (), (const, override));
-    // MOCK_METHOD(void, ChangeBalance, (int diff), (override));
-    // MOCK_METHOD(void, Lock, (), (override));
     MOCK_METHOD(void, Unlock, (), (override));
 };
 
@@ -21,36 +18,24 @@ public:
     MOCK_METHOD(void, SaveToDataBase, (Account& from, Account& to, int sum), (override));
 };
 
-TEST(Account, GetBalance){
-    NiceMock<MockAccount> acc(1,100);
-    EXPECT_EQ(acc.Account::GetBalance(), 100);
+TEST(Account, InitGetChange){
+    NiceMock<MockAccount> n(184953, 500);
+    EXPECT_EQ(n.Account::GetBalance(), 500);
+    EXPECT_THROW(n.Account::ChangeBalance(100), std::runtime_error);
+    n.Account::Lock();
+    EXPECT_THROW(n.Account::Lock(), std::runtime_error);
+    n.Account::ChangeBalance(100);
+    EXPECT_EQ(n.Account::GetBalance(), 600);
 }
-
-TEST(Account, ChangeBalance){
-    NiceMock<MockAccount> acc(0, 100);
-    EXPECT_THROW(acc.Account::ChangeBalance(50), std::runtime_error);
-    acc.Account::Lock();
-    acc.Account::ChangeBalance(50);
-    EXPECT_EQ(acc.Account::GetBalance(), 150);
-    
-}
-
-TEST(Account, Lock){
-    NiceMock<MockAccount> acc(0, 100);
-    acc.Account::Lock();
-    EXPECT_THROW(acc.Account::Lock(), std::runtime_error);
-}
-
 TEST(Account, Unlock){
-    NiceMock<MockAccount> acc(0, 100);
-    EXPECT_CALL(acc, Unlock()).Times(1);
-    acc.Unlock();
+    NiceMock<MockAccount> n(184953, 500);
+    EXPECT_CALL(n, Unlock()).Times(1);
+    n.Unlock();
 }
-
-TEST(Transaction, SaveToDataBase){
-    NiceMock<MockAccount> f_acc(0, 200);
-    NiceMock<MockAccount> t_acc(1, 300);
-    MockTransaction tr;
-    EXPECT_CALL(tr, SaveToDataBase(f_acc, t_acc, 150)).Times(1);
-    tr.SaveToDataBase(f_acc, t_acc, 150);
+TEST(Transaction, Saving){
+    NiceMock<MockAccount> n(184953, 500);
+    NiceMock<MockAccount> m(184954, 200);
+    MockTransaction l;
+    EXPECT_CALL(l, SaveToDataBase(n, m, 300)).Times(1);
+    l.SaveToDataBase(n, m, 300);
 }
