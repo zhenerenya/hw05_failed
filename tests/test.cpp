@@ -1,4 +1,3 @@
- 
 #include <Transaction.h>
 #include <Account.h>
 #include <gtest/gtest.h>
