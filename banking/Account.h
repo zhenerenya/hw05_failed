@@ -23,4 +23,3 @@ class Account {
   int balance_;
   bool is_locked_;
 };
-

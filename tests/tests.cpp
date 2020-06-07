@@ -39,4 +39,3 @@ TEST(Transaction, Saving){
     EXPECT_CALL(l, SaveToDataBase(n, m, 300)).Times(1);
     l.SaveToDataBase(n, m, 300);
 }
-

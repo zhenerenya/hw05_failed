@@ -20,4 +20,3 @@ class Transaction {
 
   int fee_;
 };
-
