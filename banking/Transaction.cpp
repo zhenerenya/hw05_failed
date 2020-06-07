@@ -63,3 +63,4 @@ void Transaction::SaveToDataBase(Account& from, Account& to, int sum) {
             << std::endl;
   std::cout << "Balance " << to.id() << " is " << to.GetBalance() << std::endl;
 }
+
